@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Controller {
+    private static WeatherClient weatherClient;
+
     @FXML
     private Label welcomeText;
 
@@ -25,6 +27,7 @@ public class Controller {
 
     public void initialize() {
         startClockUpdate();
+        weatherClient = new WeatherClient();
     }
 
     private void startClockUpdate() {
