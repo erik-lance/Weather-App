@@ -11,4 +11,8 @@ public class Controller {
     protected void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
+
+    public Controller() {
+        System.out.println("Controller loaded");
+    }
 }
