@@ -52,6 +52,10 @@ public class WeatherClient {
                 JSONParser parser = new JSONParser();
                 JSONObject data = (JSONObject) parser.parse(infoString.toString());
 
+                if (data == null) {
+                    throw new RuntimeException("Data failed to parse");
+                }
+
                 return data;
             }
         }
@@ -80,6 +84,15 @@ public class WeatherClient {
 
                 WeatherData weatherData = new WeatherData(city, country, description,
                         temperature, humidity, pressure, windSpeed, windDirection);
+
+                if (!weatherData.city().equals(city)) { throw new RuntimeException("City mismatch"); }
+                if (!weatherData.country().equals(country)) { throw new RuntimeException("Country mismatch"); }
+                if (!weatherData.description().equals(description)) { throw new RuntimeException("Description mismatch"); }
+                if (!weatherData.temperature().equals(temperature)) { throw new RuntimeException("Temperature mismatch"); }
+                if (!weatherData.humidity().equals(humidity)) { throw new RuntimeException("Humidity mismatch"); }
+                if (!weatherData.pressure().equals(pressure)) { throw new RuntimeException("Pressure mismatch"); }
+                if (!weatherData.windSpeed().equals(windSpeed)) { throw new RuntimeException("Wind speed mismatch"); }
+                if (!weatherData.windDirection().equals(windDirection)) { throw new RuntimeException("Wind direction mismatch"); }
 
                 return weatherData;
         }
