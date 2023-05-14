@@ -2,7 +2,9 @@ package com.weatherapp.weatherapp;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,8 +12,6 @@ import java.util.Date;
 public class Controller {
     private static WeatherClient weatherClient;
 
-    @FXML
-    private Label welcomeText;
 
     @FXML
     private Label clockText;
@@ -20,8 +20,24 @@ public class Controller {
     private Label weatherText;
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    private TextField apiTextField;
+
+    @FXML
+    private Button weatherButton;
+
+    @FXML
+    protected void onGetWeatherButtonClick() {
+        WeatherData data = weatherClient.getWeatherData("Mandaluyong,PH");
+        System.out.println("Collected weather data: ");
+        System.out.println(data.toString());
+        updateWeatherDetails(data);
+    }
+
+    @FXML
+    protected void onUpdateAPIKeyClick() {
+        weatherClient.setAPIKey(apiTextField.getText());
+        weatherButton.setDisable(false);
+
     }
 
     @FXML
@@ -36,12 +52,6 @@ public class Controller {
     public void initialize() {
         startClockUpdate();
         weatherClient = new WeatherClient();
-        WeatherData data = weatherClient.getWeatherData("Mandaluyong,PH");
-        System.out.println("Collected weather data: ");
-        System.out.println(data.toString());
-
-
-        updateWeatherDetails(data);
     }
 
     private void startClockUpdate() {
