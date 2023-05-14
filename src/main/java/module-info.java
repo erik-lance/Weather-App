@@ -8,6 +8,7 @@ module com.weatherapp.weatherapp {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires json.simple;
+    requires io.github.cdimascio.dotenv.java;
 
     opens com.weatherapp.weatherapp to javafx.fxml;
     exports com.weatherapp.weatherapp;
