@@ -17,8 +17,16 @@ public class Controller {
     private Label clockText;
 
     @FXML
+    private Label weatherText;
+
+    @FXML
     protected void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
+    }
+
+    @FXML
+    protected void updateWeatherDetails(WeatherData weatherData) {
+        weatherText.setText(weatherData.toString());
     }
 
     public Controller() {
@@ -28,6 +36,12 @@ public class Controller {
     public void initialize() {
         startClockUpdate();
         weatherClient = new WeatherClient();
+        WeatherData data = weatherClient.getWeatherData("Mandaluyong,PH");
+        System.out.println("Collected weather data: ");
+        System.out.println(data.toString());
+
+
+        updateWeatherDetails(data);
     }
 
     private void startClockUpdate() {
