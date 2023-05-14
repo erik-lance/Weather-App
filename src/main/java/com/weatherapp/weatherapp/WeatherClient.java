@@ -1,6 +1,7 @@
 package com.weatherapp.weatherapp;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.net.HttpURLConnection;
@@ -17,12 +18,11 @@ public class WeatherClient {
     }
 
     public String getWeatherDataURL(String location) {
-        // TODO: Parse spaces in location
-        // Location: Mandaluyong, PH
+        // TODO: Parse spaces in location string to _
         return API_URL + location + "&appid=" + API_KEY + "&units=metric";
     }
 
-    public void getWeatherData(String location) {
+    public JSONObject getJSONDataOfWeatherData(String location) {
         try {
             URL url = new URL(getWeatherDataURL(location));
 
@@ -33,7 +33,7 @@ public class WeatherClient {
             int responseCode = conn.getResponseCode();
 
             if (responseCode != 200) {
-                throw new RuntimeException("HttpResponseCode: " + responseCode);
+                throw new RuntimeException("HttpResponseCode: " + responseCode + "on URL: " + url);
             }
             else {
                 System.out.println("Connection successful");
@@ -49,18 +49,43 @@ public class WeatherClient {
 
                 sc.close();
 
-                System.out.println("\nJSON data in string format");
-
                 JSONParser parser = new JSONParser();
-                JSONArray data = (JSONArray) parser.parse(String.valueOf(infoString));
+                JSONObject data = (JSONObject) parser.parse(infoString.toString());
 
-                System.out.println(data);
-
+                return data;
             }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    public WeatherData getWeatherData(String location) {
+        try {
+                JSONObject data = getJSONDataOfWeatherData(location);
+
+                if (data == null) {
+                    throw new RuntimeException("No data found");
+                }
+
+                String city = data.get("name").toString();
+                String country = ((JSONObject) data.get("sys")).get("country").toString();
+                String description = ((JSONObject) ((JSONArray) data.get("weather")).get(0)).get("description").toString();
+                String temperature = ((JSONObject) data.get("main")).get("temp").toString();
+                String humidity = ((JSONObject) data.get("main")).get("humidity").toString();
+                String pressure = ((JSONObject) data.get("main")).get("pressure").toString();
+                String windSpeed = ((JSONObject) data.get("wind")).get("speed").toString();
+                String windDirection = ((JSONObject) data.get("wind")).get("deg").toString();
+
+                WeatherData weatherData = new WeatherData(city, country, description,
+                        temperature, humidity, pressure, windSpeed, windDirection);
+
+                return weatherData;
         }
         catch (Exception e) {
             System.out.println("Error: " + e);
+            return null;
         }
     }
 
