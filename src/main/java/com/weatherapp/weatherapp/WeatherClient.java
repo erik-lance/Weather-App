@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 
 public class WeatherClient {
-    private static final String API_KEY = "";
+    private static String API_KEY = "";
     private static final String API_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
 
     public WeatherClient() {
@@ -100,6 +100,10 @@ public class WeatherClient {
             System.out.println("Error: " + e);
             return null;
         }
+    }
+
+    public void setAPIKey(String key) {
+        API_KEY = key;
     }
 
 }
