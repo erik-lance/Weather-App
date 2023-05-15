@@ -5,13 +5,21 @@ public record WeatherData(String city, String country, String description, Strin
 
     @Override
     public String toString() {
-        return city + ", " + country + "\n" +
-                description + "\n" +
-                temperature + "\n" +
-                humidity + "\n" +
-                pressure + "\n" +
-                windSpeed + "\n" +
-                windDirection;
+        String template = """
+                City: %s
+                Country: %s
+                Description: %s
+                Temperature: %s
+                Humidity: %s
+                Pressure: %s
+                Wind speed: %s
+                Wind direction: %s
+                """;
+        String result = String.format(template,
+                city, country, description,
+                temperature, humidity, pressure,
+                windSpeed, windDirection);
+        return result;
     }
 
     @Override
