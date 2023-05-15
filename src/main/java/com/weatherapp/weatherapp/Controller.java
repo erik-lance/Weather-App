@@ -1,5 +1,6 @@
 package com.weatherapp.weatherapp;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,9 +36,8 @@ public class Controller {
 
     @FXML
     protected void onUpdateAPIKeyClick() {
-        weatherClient.setAPIKey(apiTextField.getText());
-        weatherButton.setDisable(false);
-
+        String key = apiTextField.getText();
+        updateKey(key);
     }
 
     @FXML
@@ -52,6 +52,14 @@ public class Controller {
     public void initialize() {
         startClockUpdate();
         weatherClient = new WeatherClient();
+        Dotenv dotenv = Dotenv.load();
+        String API_KEY = dotenv.get("API_KEY");
+        if (API_KEY == null) {
+            System.out.println("API_KEY not found in .env file");
+        } else {
+            System.out.println("API_KEY found in .env file: "+ API_KEY);
+            updateKey(API_KEY);
+        }
     }
 
     private void startClockUpdate() {
@@ -66,6 +74,12 @@ public class Controller {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         String time = formatter.format(new Date());
         clockText.setText(time);
+    }
+
+    private void updateKey(String key) {
+        weatherClient.setAPIKey(key);
+        weatherButton.setDisable(false);
+        apiTextField.setText(key);
     }
 
 
