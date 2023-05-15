@@ -65,6 +65,37 @@ public class WeatherClient {
         }
     }
 
+    public WeatherData parseWeatherJSON(JSONObject data) {
+        try {
+            String city = data.get("name").toString();
+            String country = ((JSONObject) data.get("sys")).get("country").toString();
+            String description = ((JSONObject) ((JSONArray) data.get("weather")).get(0)).get("description").toString();
+            String temperature = ((JSONObject) data.get("main")).get("temp").toString();
+            String humidity = ((JSONObject) data.get("main")).get("humidity").toString();
+            String pressure = ((JSONObject) data.get("main")).get("pressure").toString();
+            String windSpeed = ((JSONObject) data.get("wind")).get("speed").toString();
+            String windDirection = ((JSONObject) data.get("wind")).get("deg").toString();
+
+            WeatherData weatherData = new WeatherData(city, country, description,
+                    temperature, humidity, pressure, windSpeed, windDirection);
+
+            if (!weatherData.city().equals(city)) { throw new RuntimeException("City mismatch"); }
+            if (!weatherData.country().equals(country)) { throw new RuntimeException("Country mismatch"); }
+            if (!weatherData.description().equals(description)) { throw new RuntimeException("Description mismatch"); }
+            if (!weatherData.temperature().equals(temperature)) { throw new RuntimeException("Temperature mismatch"); }
+            if (!weatherData.humidity().equals(humidity)) { throw new RuntimeException("Humidity mismatch"); }
+            if (!weatherData.pressure().equals(pressure)) { throw new RuntimeException("Pressure mismatch"); }
+            if (!weatherData.windSpeed().equals(windSpeed)) { throw new RuntimeException("Wind speed mismatch"); }
+            if (!weatherData.windDirection().equals(windDirection)) { throw new RuntimeException("Wind direction mismatch"); }
+
+            return weatherData;
+        }
+        catch (Exception e) {
+            System.out.println("Error: " + e);
+            return null;
+        }
+    }
+
     public WeatherData getWeatherData(String location) {
         try {
                 JSONObject data = getJSONDataOfWeatherData(location);
@@ -73,26 +104,11 @@ public class WeatherClient {
                     throw new RuntimeException("No data found");
                 }
 
-                String city = data.get("name").toString();
-                String country = ((JSONObject) data.get("sys")).get("country").toString();
-                String description = ((JSONObject) ((JSONArray) data.get("weather")).get(0)).get("description").toString();
-                String temperature = ((JSONObject) data.get("main")).get("temp").toString();
-                String humidity = ((JSONObject) data.get("main")).get("humidity").toString();
-                String pressure = ((JSONObject) data.get("main")).get("pressure").toString();
-                String windSpeed = ((JSONObject) data.get("wind")).get("speed").toString();
-                String windDirection = ((JSONObject) data.get("wind")).get("deg").toString();
+                WeatherData weatherData = parseWeatherJSON(data);
 
-                WeatherData weatherData = new WeatherData(city, country, description,
-                        temperature, humidity, pressure, windSpeed, windDirection);
-
-                if (!weatherData.city().equals(city)) { throw new RuntimeException("City mismatch"); }
-                if (!weatherData.country().equals(country)) { throw new RuntimeException("Country mismatch"); }
-                if (!weatherData.description().equals(description)) { throw new RuntimeException("Description mismatch"); }
-                if (!weatherData.temperature().equals(temperature)) { throw new RuntimeException("Temperature mismatch"); }
-                if (!weatherData.humidity().equals(humidity)) { throw new RuntimeException("Humidity mismatch"); }
-                if (!weatherData.pressure().equals(pressure)) { throw new RuntimeException("Pressure mismatch"); }
-                if (!weatherData.windSpeed().equals(windSpeed)) { throw new RuntimeException("Wind speed mismatch"); }
-                if (!weatherData.windDirection().equals(windDirection)) { throw new RuntimeException("Wind direction mismatch"); }
+                if (weatherData == null) {
+                    throw new RuntimeException("WeatherData failed to parse");
+                }
 
                 return weatherData;
         }
