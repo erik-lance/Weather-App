@@ -6,7 +6,6 @@ module com.weatherapp.weatherapp {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
     requires json.simple;
     requires io.github.cdimascio.dotenv.java;
 
