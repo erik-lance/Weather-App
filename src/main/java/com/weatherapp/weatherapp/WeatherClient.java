@@ -18,8 +18,8 @@ public class WeatherClient {
     }
 
     public String getWeatherDataURL(String location) {
-        // TODO: Parse spaces in location string to _
-        return API_URL + location + "&appid=" + API_KEY + "&units=metric";
+        String parsedLocation = location.replace(" ", "_");
+        return API_URL + parsedLocation + "&appid=" + API_KEY + "&units=metric";
     }
 
     public JSONObject getJSONDataOfWeatherData(String location) {

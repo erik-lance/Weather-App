@@ -42,6 +42,14 @@ class WeatherClientTest {
     }
 
     @Test
+    void getWeatherURL() {
+        String location = "Mandaluyong, PH";
+        String parsedURL = client.getWeatherDataURL(location);
+        String expectedURL = "http://api.openweathermap.org/data/2.5/weather?q=Mandaluyong,_PH&appid=&units=metric";
+        assertEquals(expectedURL, parsedURL);
+    }
+
+    @Test
     void getWeatherData() {
     }
 }
